@@ -42,36 +42,35 @@ int sizeArrayList(arrayList* al) {
 	return al->size;
 }
 
-int insertArrayList(arrayList* al,
-	int pos, elementArrayList item) {
-	if (pos < 0 || pos > al->size) {return 0;}
-	if (isFullArrayList(al)) { return 0; }  // 추가
-	
-	for (int i = al->size - 1; i >= pos; i--) {
-	    al->data[i + 1] = al->data[i];
-	}
+// deleteArrayList 수정
+elementArrayList deleteArrayList(arrayList* al, int pos) {
+    if (pos < 0 || pos >= al->size) {
+        fprintf(stderr, "Index Error\n");
+        exit(1); // 혹은 적절한 에러 데이터 반환
+    }
 
-	al->data[pos] = item;
-	al->size++;
-
-	return 1;
+    elementArrayList item = al->data[pos];
+    for (int i = pos; i < al->size - 1; i++) {
+        al->data[i] = al->data[i + 1];
+    }
+    al->size--;
+    return item;
 }
 
-elementArrayList deleteArrayList(
-	arrayList* al, int pos) {
-	if (pos < 0 || pos > al->size - 1) {
-	}
-
-	elementArrayList item = al->data[pos];
-
-	for (int i = pos; i < al->size - 1; i++) {
-		al->data[i] = al->data[i + 1];
-	}
-
-	al->size--;
-
-	return item;
+// insertArrayList 보완
+int insertArrayList(arrayList* al, int pos, elementArrayList item) {
+    if (isFullArrayList(al) || pos < 0 || pos > al->size) {
+        return 0; 
+    }
+    // 오른쪽으로 한 칸씩 밀기
+    for (int i = al->size - 1; i >= pos; i--) {
+        al->data[i + 1] = al->data[i];
+    }
+    al->data[pos] = item;
+    al->size++;
+    return 1;
 }
+
 
 int initArrayList(arrayList* al) {
 	for (int i = al->size - 1; i >= 0; i--) {
