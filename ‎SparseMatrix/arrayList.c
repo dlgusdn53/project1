@@ -44,12 +44,11 @@ int sizeArrayList(arrayList* al) {
 
 int insertArrayList(arrayList* al,
 	int pos, elementArrayList item) {
-	if (pos < 0 || pos > al->size) {
-		return 0;
-	}
-
-	for (int i = al->size; i >= pos; i--) {
-		al->data[i + 1] = al->data[i];
+	if (pos < 0 || pos > al->size) {return 0;}
+	if (isFullArrayList(al)) { return 0; }  // 추가
+	
+	for (int i = al->size - 1; i >= pos; i--) {
+	    al->data[i + 1] = al->data[i];
 	}
 
 	al->data[pos] = item;
